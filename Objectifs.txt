@@ -23,4 +23,27 @@ Objectifs programmation :
 
 
 	 
+	Composition du code : 
+
+Scènes : 
+
+Scène de départ : 
+
+	Textes racontant l'histoire
+	Choix d'élément initial avec hover expliquant passifs et actifs 
+	Jet aléatoire du nombre de coeurs entre 2 et 6 
+	Jet aléatoire du score d'attaque entre 25 et 55 
+	Affichage des stats 
+	Passage à scène ville/TUTO en communiquant les stats du personnage et son élément de base 
+
+Scene Ville Tuto
+
+	Ennemis : Tigres à dent de cristal suiveurs, rapides. Tous de l'élément du joueur. 
+	Chef des tigres à dents de cristal bloquant le passage au souterrain, besoin de terrasser les autres tigres à dent de cristal 
+	Une gemme d'un autre élmément que celui du joueur disponible, quand on la ramasse on affiche une explication du système de changement de pouvoir 
+	Une fois les tigres à dent de cristal trerrassés et le chef des tigres à dents de cristal écarté, le joueur peut entrer dans le souterrain = changement de scène en transmettant les stats, la vie actuelle, la vie maximale, l'élément de base et les gemmes 
+
+Scene Donjon 
 	
+	Ennemis : traditionnalistes ayant des gemmes aléatoires de différents éléments et une chance de dropper ces gemmes.
+		
