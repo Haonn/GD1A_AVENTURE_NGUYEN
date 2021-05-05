@@ -80,7 +80,7 @@ class Scene1 extends Phaser.Scene {
 
   this.bullets = this.physics.add.group({
     defaultKey: 'thunderProjectile',
-    maxSize: 100
+    maxSize: 10
 });
 this.input.on('pointerdown', this.shoot, this);
 
@@ -99,7 +99,7 @@ this.input.on('pointerdown', this.shoot, this);
         /*Coefficient entre dX et dY (a voir dans quel sens l'utiliser)
         coeffDistance = (Math.abs(dY)/Math.abs(dX)) */
 
-        /Distance entre les deux points 
+        /*Distance entre les deux points 
         distance = (Math.abs(dY)+Math.abs(dX)); */
 
         //Distance à ajouter pour atteindre la constante vitesse.
@@ -133,13 +133,7 @@ this.input.on('pointerdown', this.shoot, this);
 
   update() 
   {
-    this.bullets.children.each(function(b) {
-      if (b.active) {
-          if (b.y < 0) {
-              b.setActive(false);
-          }
-      }
-  }.bind(this));
+    
 
     if (gameOver == true){
       player.x = startX;
@@ -293,6 +287,14 @@ this.input.on('pointerdown', this.shoot, this);
   }
 
   PorteCollide=false;
+
+  this.bullets.children.each(function(b) {
+    if (b.active) {
+        if (b.y < 0) {
+            b.setActive(false);
+        }
+    }
+}.bind(this));
   }
 
 }
