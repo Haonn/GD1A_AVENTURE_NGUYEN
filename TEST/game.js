@@ -40,8 +40,13 @@ var bullets;
 var distance;
 var dX;
 var dY;
+var dSpeed;
+var coeffDistance
 
-
+//ENNEMIS
+var ennemis;
+var ennemi1;
+var ennemi2;
 
 
 //PASSAGE DE NIVEAU

@@ -91,12 +91,82 @@ this.input.on('pointerdown', this.shoot, this);
     if (bullet) {
         bullet.setActive(true);
         bullet.setVisible(true);
-        //calcul vecteur de direction du projectile
-        dY = ( pointer.y - player.y)
-        dX = ( pointer.x - player.x)
+
+        //Calcul de coordonnées du vecteur entre les deux projectilsq
+        dY = ( pointer.y - player.y);
+        dX = ( pointer.x - player.x);
+
+        if (dY < dX )
+        { 
+          coeffDistance = (Math.abs(dX)/Math.abs(dY)) // Nombre de fois qu'il y a dY dans dX 
+
+          //Distance à rajouter pour atteindre la constante de vitesse 
+          dSpeed = (800-(Math.abs(dY)+Math.abs(dX)));
+
+          if (dSpeed > 0 )
+          {  
+            bullet.body.velocity.y = dY + (800/coeffDistance);
+            bullet.body.velocity.x = dX + (800 - 800/coeffDistance);
+          }
+
+          if (dSpeed <= 0 )
+          {  
+            bullet.body.velocity.y = dY - (800/coeffDistance);
+            bullet.body.velocity.x = dX - (800 - 800/coeffDistance);
+          }
+          
+        }
+        else 
+        {
+          coeffDistance = (Math.abs(dY)/Math.abs(dX)) // Nombre de fois qu'il y a dY dans dX 
+
+          //Distance à rajouter pour atteindre la constante de vitesse 
+          dSpeed = (800-(Math.abs(dX)+Math.abs(dY)));
+
+          if (dSpeed > 0 )
+          {  
+            bullet.body.velocity.x = dX + (800/coeffDistance);
+            bullet.body.velocity.y = dY + (800 - 800/coeffDistance);
+          }
+
+          if (dSpeed <= 0 )
+          {  
+            bullet.body.velocity.x = dX - (800/coeffDistance);
+            bullet.body.velocity.y = dY - (800 - 800/coeffDistance);
+          }
+          
+        }
+
+        
+
+
+        //Distance entre les deux points 
+        //distance = (Math.abs(dY)+Math.abs(dX));
+
+        
+        dSpeed = (800-distance); 
+
         bullet.body.velocity.y = dY;
         bullet.body.velocity.x = dX;
-        distance = Math.abs()
+
+        
+
+        /*if (facing == "left"){
+          bullet.body.velocity.x = -200
+          bullet.body.velocity.y = 0
+        }
+        if (facing == "right"){
+          bullet.body.velocity.x = 200
+          bullet.body.velocity.y = 0
+        }
+        if (facing == "up"){
+          bullet.body.velocity.x = 0
+          bullet.body.velocity.y = -200
+        }
+        if (facing == "down"){
+          bullet.body.velocity.x = 0
+          bullet.body.velocity.y = 200
+        }*/
         
     }
 }
@@ -104,6 +174,14 @@ this.input.on('pointerdown', this.shoot, this);
 
   update() 
   {
+    this.bullets.children.each(function(b) {
+      if (b.active) {
+          if (b.y < 0) {
+              b.setActive(false);
+          }
+      }
+  }.bind(this));
+
     if (gameOver == true){
       player.x = startX;
       player.y = startY;
@@ -115,6 +193,10 @@ this.input.on('pointerdown', this.shoot, this);
     down=cursors.down.isDown ? true : false;
     right=cursors.right.isDown ? true : false;
     left=cursors.left.isDown ? true : false;
+
+    if(cursors.space.isDown == true ){
+      this.shoot,this;
+    }
     
     if (up == true) 
     {
@@ -220,13 +302,7 @@ this.input.on('pointerdown', this.shoot, this);
       }
 
     }
-      this.bullets.children.each(function(b) {
-          if (b.active) {
-              if (b.y < 0) {
-                  b.setActive(false);
-              }
-          }
-      }.bind(this));
+      
 ////////////////////////////////////////////////
     
   if(up == false && down == false)
