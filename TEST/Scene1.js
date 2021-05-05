@@ -92,62 +92,21 @@ this.input.on('pointerdown', this.shoot, this);
         bullet.setActive(true);
         bullet.setVisible(true);
 
-        //Calcul de coordonnées du vecteur entre les deux projectilsq
+        //Calcul de coordonnées du vecteur entre les deux projectiles
         dY = ( pointer.y - player.y);
         dX = ( pointer.x - player.x);
 
-        if (dY < dX )
-        { 
-          coeffDistance = (Math.abs(dX)/Math.abs(dY)) // Nombre de fois qu'il y a dY dans dX 
+        /*Coefficient entre dX et dY (a voir dans quel sens l'utiliser)
+        coeffDistance = (Math.abs(dY)/Math.abs(dX)) */
 
-          //Distance à rajouter pour atteindre la constante de vitesse 
-          dSpeed = (800-(Math.abs(dY)+Math.abs(dX)));
+        /Distance entre les deux points 
+        distance = (Math.abs(dY)+Math.abs(dX)); */
 
-          if (dSpeed > 0 )
-          {  
-            bullet.body.velocity.y = dY + (800/coeffDistance);
-            bullet.body.velocity.x = dX + (800 - 800/coeffDistance);
-          }
+        //Distance à ajouter pour atteindre la constante vitesse.
+        dSpeed = (800/(Math.abs(dY)+Math.abs(dX))); 
 
-          if (dSpeed <= 0 )
-          {  
-            bullet.body.velocity.y = dY - (800/coeffDistance);
-            bullet.body.velocity.x = dX - (800 - 800/coeffDistance);
-          }
-          
-        }
-        else 
-        {
-          coeffDistance = (Math.abs(dY)/Math.abs(dX)) // Nombre de fois qu'il y a dY dans dX 
-
-          //Distance à rajouter pour atteindre la constante de vitesse 
-          dSpeed = (800-(Math.abs(dX)+Math.abs(dY)));
-
-          if (dSpeed > 0 )
-          {  
-            bullet.body.velocity.x = dX + (800/coeffDistance);
-            bullet.body.velocity.y = dY + (800 - 800/coeffDistance);
-          }
-
-          if (dSpeed <= 0 )
-          {  
-            bullet.body.velocity.x = dX - (800/coeffDistance);
-            bullet.body.velocity.y = dY - (800 - 800/coeffDistance);
-          }
-          
-        }
-
-        
-
-
-        //Distance entre les deux points 
-        //distance = (Math.abs(dY)+Math.abs(dX));
-
-        
-        dSpeed = (800-distance); 
-
-        bullet.body.velocity.y = dY;
-        bullet.body.velocity.x = dX;
+        bullet.body.velocity.y = dY*dSpeed;
+        bullet.body.velocity.x = dX*dSpeed;
 
         
 
