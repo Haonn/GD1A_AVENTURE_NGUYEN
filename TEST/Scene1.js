@@ -80,60 +80,62 @@ class Scene1 extends Phaser.Scene {
 
   this.bullets = this.physics.add.group({
     defaultKey: 'thunderProjectile',
-    maxSize: 10
+    maxSize: 1000
 });
 this.input.on('pointerdown', this.shoot, this);
 
   }
   // Coordonnées de AB = (xB-xA ; yB-yA) ici A = player(player.x ; player.y) et B = pointeur(pointeur.x;pointeur.y)
   shoot(pointer) {
-    var bullet = this.bullets.get(player.x, player.y);
-    if (bullet) {
-        bullet.setActive(true);
-        bullet.setVisible(true);
+    if (thunderAbility == true)
+    {
+      var bullet = this.bullets.get(player.x, player.y);
+      if (bullet) {
+          bullet.setActive(true);
+          bullet.setVisible(true);
 
-        //Calcul de coordonnées du vecteur entre les deux projectiles
-        dY = ( pointer.y - player.y);
-        dX = ( pointer.x - player.x);
+          //Calcul de coordonnées du vecteur entre les deux projectiles
+          dY = ( pointer.y - player.y);
+          dX = ( pointer.x - player.x);
 
-        /*Coefficient entre dX et dY (a voir dans quel sens l'utiliser)
-        coeffDistance = (Math.abs(dY)/Math.abs(dX)) */
+          /*Coefficient entre dX et dY (a voir dans quel sens l'utiliser)
+          coeffDistance = (Math.abs(dY)/Math.abs(dX)) */
 
-        /*Distance entre les deux points 
-        distance = (Math.abs(dY)+Math.abs(dX)); */
+          /*Distance entre les deux points 
+          distance = (Math.abs(dY)+Math.abs(dX)); */
 
-        //Distance à ajouter pour atteindre la constante vitesse.
-        dSpeed = (800/(Math.abs(dY)+Math.abs(dX))); 
+          //Distance à ajouter pour atteindre la constante vitesse.
+          dSpeed = (800/(Math.abs(dY)+Math.abs(dX))); 
 
-        bullet.body.velocity.y = dY*dSpeed;
-        bullet.body.velocity.x = dX*dSpeed;
+          bullet.body.velocity.y = dY*dSpeed;
+          bullet.body.velocity.x = dX*dSpeed;
 
-        
+          
 
-        /*if (facing == "left"){
-          bullet.body.velocity.x = -200
-          bullet.body.velocity.y = 0
-        }
-        if (facing == "right"){
-          bullet.body.velocity.x = 200
-          bullet.body.velocity.y = 0
-        }
-        if (facing == "up"){
-          bullet.body.velocity.x = 0
-          bullet.body.velocity.y = -200
-        }
-        if (facing == "down"){
-          bullet.body.velocity.x = 0
-          bullet.body.velocity.y = 200
-        }*/
-        
-    }
+          /*if (facing == "left"){
+            bullet.body.velocity.x = -200
+            bullet.body.velocity.y = 0
+          }
+          if (facing == "right"){
+            bullet.body.velocity.x = 200
+            bullet.body.velocity.y = 0
+          }
+          if (facing == "up"){
+            bullet.body.velocity.x = 0
+            bullet.body.velocity.y = -200
+          }
+          if (facing == "down"){
+            bullet.body.velocity.x = 0
+            bullet.body.velocity.y = 200
+          }*/
+          
+      }
+  }
 }
 
 
   update() 
   {
-    
 
     if (gameOver == true){
       player.x = startX;
