@@ -11,34 +11,59 @@ class Scene2 extends Phaser.Scene {
   
   preload()
   {
-    this.load.image("carteNiv2", "assets/carteNiv2.png")
-    this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 42 });
+    this.load.image("carteNiv2", "assets/carteNiv1.png");
+    this.load.image("porte", "assets/porte.png");
+    this.load.image("eclair", "assets/thunder.png");
+    this.load.spritesheet('perso', 'assets/perso.png', { frameWidth: 103, frameHeight: 170 });
+    this.load.spritesheet('scarabe', 'assets/scarabe.png', { frameWidth: 272, frameHeight: 236 });
+
+    this.load.image("thunderProjectile", "assets/thunderProjectile.png");
   }
 
   create() 
   {
     //INTERFACE
-    this.add.image(300,300, "carteNiv2");
-    this.add.text(20, 20, "Niveau 2");
+    this.add.image(640,360, "carteNiv2").setScale(0.3);
+    winText = this.add.text(200, 200, '', { fontSize: '200px', fill: '#111' });
 
     //ANIMATIONS
+    this.anims.create({
+      key: 'leftEnnemi',
+      frames: this.anims.generateFrameNumbers('scarabe', { start: 0, end: 20 }),
+      frameRate: 20,
+      repeat: -1
+    });
 
     this.anims.create({
-      key: 'left',
-      frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-      frameRate: 10,
+      key: 'rightEnnemi',
+      frames: this.anims.generateFrameNumbers('scarabe', { start: 21, end: 41 }),
+      frameRate: 20,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'front',
+      frames: this.anims.generateFrameNumbers('perso', { start: 0, end: 20 }),
+      frameRate: 30,
       repeat: -1
     });
   
     this.anims.create({
       key: 'turn',
-      frames: [ { key: 'dude', frame: 4 } ],
+      frames: [ { key: 'perso', frame: 10 } ],
       frameRate: 20
     });
   
     this.anims.create({
+      key: 'behind',
+      frames: this.anims.generateFrameNumbers('perso', { start: 21, end: 41 }),
+      frameRate: 10,
+      repeat: -1
+    });
+  
+    this.anims.create({
       key: 'right',
-      frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+      frames: this.anims.generateFrameNumbers('perso', { start: 42, end: 62 }),
       frameRate: 10,
       repeat: -1
     });
@@ -46,7 +71,7 @@ class Scene2 extends Phaser.Scene {
       startY = 10;
 
       //PLAYER
-    player = this.physics.add.sprite(startX, startY, 'dude');
+    player = this.physics.add.sprite(startX, startY, 'perso');
     player.setCollideWorldBounds(true);
 
     //CAMERA
@@ -54,11 +79,73 @@ class Scene2 extends Phaser.Scene {
     this.cameras.main.setBounds(0,0,1280,720);
     this.cameras.main.startFollow(player,true,1,1);
 
+
+    //Ennemi
+    ennemi2 = this.physics.add.sprite(300, 300, 'scarabe');
+    ennemi2.setCollideWorldBounds(true);
+    this.physics.add.collider(player, ennemi2,ouch);
+
+    //texte Victoire
+
+
   //CONTRÔLES
   cursors = this.input.keyboard.createCursorKeys();
 
-  }
+  this.bullets = this.physics.add.group({
+    defaultKey: 'thunderProjectile',
+    maxSize: 1000
+});
+this.input.on('pointerdown', this.shoot, this);
 
+  }
+  // Coordonnées de AB = (xB-xA ; yB-yA) ici A = player(player.x ; player.y) et B = pointeur(pointeur.x;pointeur.y)
+  shoot(pointer) {
+    if (thunderAbility == true)
+    {
+      var bullet = this.bullets.get(player.x, player.y);
+      if (bullet) {
+          bullet.setActive(true);
+          bullet.setVisible(true);
+
+          //Calcul de coordonnées du vecteur entre les deux projectiles
+          dY = ( pointer.y - player.y);
+          dX = ( pointer.x - player.x);
+
+          /*Coefficient entre dX et dY (a voir dans quel sens l'utiliser)
+          coeffDistance = (Math.abs(dY)/Math.abs(dX)) */
+
+          /*Distance entre les deux points 
+          distance = (Math.abs(dY)+Math.abs(dX)); */
+
+          //Distance à ajouter pour atteindre la constante vitesse.
+          dSpeed = (800/(Math.abs(dY)+Math.abs(dX))); 
+
+          bullet.body.velocity.y = dY*dSpeed;
+          bullet.body.velocity.x = dX*dSpeed;
+
+          
+
+          /*if (facing == "left"){
+            bullet.body.velocity.x = -200
+            bullet.body.velocity.y = 0
+          }
+          if (facing == "right"){
+            bullet.body.velocity.x = 200
+            bullet.body.velocity.y = 0
+          }
+          if (facing == "up"){
+            bullet.body.velocity.x = 0
+            bullet.body.velocity.y = -200
+          }
+          if (facing == "down"){
+            bullet.body.velocity.x = 0
+            bullet.body.velocity.y = 200
+          }*/
+          
+      }
+    }
+    this.physics.add.collider(this.bullets, ennemi2,bulletsennemi2);
+}
   update() 
   {
     if (gameOver == true){
@@ -76,18 +163,21 @@ class Scene2 extends Phaser.Scene {
     if (up == true) 
     {
       facing ="up";
+      player.anims.play('behind', true );
       player.setVelocityY(-150);
       
     }  
 
     if (down == true) 
     {
+      player.anims.play('front', true );
       facing ="down";
       player.setVelocityY(150);
     }
 
     if (right == true)
     {
+      player.anims.play('right', true );
       facing ="right";
       player.setVelocityX(150);
       //player.anims.play('right', true);
@@ -146,5 +236,39 @@ class Scene2 extends Phaser.Scene {
     player.setVelocityY(0);
   }
 
+  ennemi2.setVelocityX(0);
+
+  if(ennemi2Dead==true)
+    {
+      ennemi2.disableBody(true,true);
+    }
+    ennemi2.setVelocityX(0);
+    if(timeMove <= 100)
+    {
+      ennemi2.setVelocityY(-200);
+      ennemi2.anims.play('leftEnnemi', true ); 
+    }
+    else if(timeMove > 100 && timeMove <=200 )
+    {
+      ennemi2.setVelocityY(200);
+      ennemi2.anims.play('rightEnnemi', true ); 
+    }
+    else
+    {
+        timeMove =  0;
+    }
+    timeMove++;
+    if(win ==true)
+    {
+      winText.setText("Victoire !");
+      this.physics.pause();
+    }
   }
+}
+
+function bulletsennemi2()
+{
+  ennemi2Dead = true;
+
+  win = true;
 }
